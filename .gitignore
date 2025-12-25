@@ -1,0 +1,25 @@
+# --- JAVA & MAVEN ---
+target/
+*.class
+*.log
+*.jar
+*.war
+
+# --- ANGULAR & NODE ---
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+.angular/
+
+# --- IDE (Configurations locales) ---
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# --- SYSTÈME D'EXPLOITATION ---
+.DS_Store
+Thumbs.db

@@ -1,0 +1,52 @@
+name: CI - Build & Test
+
+# Quand doit-on travailler ?
+on:
+  push:
+    branches: [ "main" ] # À chaque push sur la branche main
+  pull_request:
+    branches: [ "main" ] # À chaque proposition de modification
+
+jobs:
+  # Tâche 1 : Vérifier le Backend (Java/Spring)
+  build-backend:
+    runs-on: ubuntu-latest # Utilise une machine virtuelle Linux fournie par GitHub
+    defaults:
+      run:
+        working-directory: ./backend # Important : On se place dans le dossier backend
+
+    steps:
+    - uses: actions/checkout@v4 # Récupère votre code
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven # Garde en mémoire les dépendances pour aller plus vite la prochaine fois
+
+    - name: Compil et Tests (Maven)
+      run: mvn clean verify # Commande magique qui compile et lance les tests
+
+  # Tâche 2 : Vérifier le Frontend (Angular)
+  build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend # On se place dans le dossier frontend
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Installation des dépendances
+      run: npm ci # "Clean Install" (plus sûr que npm install pour la CI)
+
+    - name: Build Angular
+      run: npm run build -- --configuration=production # Vérifie que le code se construit bien
