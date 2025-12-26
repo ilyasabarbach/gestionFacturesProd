@@ -1,9 +1,50 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Produit } from '../models/api-models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProduitService {
+  private apiUrl = 'http://localhost:8080/api/produits';
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable<Produit[]> {
+    return this.http.get<Produit[]>(this.apiUrl);
+  }
+
+  getById(id: number): Observable<Produit> {
+    return this.http.get<Produit>(`${this.apiUrl}/${id}`);
+  }
+
+  create(produit: Produit): Observable<Produit> {
+    return this.http.post<Produit>(this.apiUrl, produit);
+  }
+
+  update(id: number, produit: Produit): Observable<Produit> {
+    return this.http.put<Produit>(`${this.apiUrl}/${id}`, produit);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // --- Gestion du Stock ---
+
+  ajouterStock(id: number, quantite: number): Observable<Produit> {
+    // Appel à l'endpoint PATCH créé dans le backend
+    return this.http.patch<Produit>(
+      `${this.apiUrl}/${id}/stock/ajouter?quantite=${quantite}`,
+      {}
+    );
+  }
+
+  reduireStock(id: number, quantite: number): Observable<Produit> {
+    return this.http.patch<Produit>(
+      `${this.apiUrl}/${id}/stock/reduire?quantite=${quantite}`,
+      {}
+    );
+  }
 }

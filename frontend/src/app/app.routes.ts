@@ -1,25 +1,48 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ClientListComponent } from './features/clients/client-list/client-list.component';
+import { ClientFormComponent } from './features/clients/client-form/client-form.component';
+import { ProduitListComponent } from './features/produits/produit-list/produit-list.component';
+import { ProduitFormComponent } from './features/produits/produit-form/produit-form.component';
+// Import Devis
+import { DevisListComponent } from './features/devis/devis-list/devis-list.component';
+import { DevisFormComponent } from './features/devis/devis-form/devis-form.component';
 
 export const routes: Routes = [
-  // Route par défaut : redirige vers login
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-
-  // Page de connexion (Accessible à tous)
   { path: 'login', component: LoginComponent },
 
-  // Exemple de page protégée (Le Dashboard ou la liste des clients)
-  // Nous la créerons juste après, pour l'instant ça redirige vers login si on n'est pas connecté
   {
     path: 'clients',
-    loadComponent: () =>
-      import('./features/clients/client-list/client-list.component').then(
-        (m) => m.ClientListComponent
-      ),
     canActivate: [AuthGuard],
+    children: [
+      { path: '', component: ClientListComponent },
+      { path: 'nouveau', component: ClientFormComponent },
+      { path: ':id/modifier', component: ClientFormComponent },
+    ],
+  },
+  {
+    path: 'produits',
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: ProduitListComponent },
+      { path: 'nouveau', component: ProduitFormComponent },
+      { path: ':id/modifier', component: ProduitFormComponent },
+    ],
   },
 
-  // Redirection si URL inconnue
+  // --- NOUVEAU : Devis ---
+  {
+    path: 'devis',
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: DevisListComponent },
+      { path: 'nouveau', component: DevisFormComponent },
+      // Note : On ne modifie pas un devis validé, mais pour l'instant on garde la route
+      { path: ':id/modifier', component: DevisFormComponent },
+    ],
+  },
+
   { path: '**', redirectTo: '/login' },
 ];

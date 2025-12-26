@@ -1,1 +1,69 @@
-<p>client-form works!</p>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h4 class="mb-0">
+            {{ isEditMode ? "Modifier le Client" : "Nouveau Client" }}
+          </h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Nom complet</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="nom"
+                [class.is-invalid]="
+                  clientForm.get('nom')?.invalid &&
+                  clientForm.get('nom')?.touched
+                "
+              />
+              <div class="invalid-feedback">Le nom est obligatoire.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="
+                  clientForm.get('email')?.invalid &&
+                  clientForm.get('email')?.touched
+                "
+              />
+              <div class="invalid-feedback">Email valide requis.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Téléphone</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="telephone"
+                [class.is-invalid]="
+                  clientForm.get('telephone')?.invalid &&
+                  clientForm.get('telephone')?.touched
+                "
+              />
+              <div class="invalid-feedback">Téléphone requis.</div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <a routerLink="/clients" class="btn btn-secondary">Annuler</a>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="clientForm.invalid"
+              >
+                {{ isEditMode ? "Mettre à jour" : "Créer" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

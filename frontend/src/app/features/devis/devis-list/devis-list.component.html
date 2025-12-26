@@ -1,1 +1,60 @@
-<p>devis-list works!</p>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Mes Devis</h2>
+    <a routerLink="/devis/nouveau" class="btn btn-primary"> + Nouveau Devis </a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Référence</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Montant TTC</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of devisList">
+            <td>{{ d.numeroDevis }}</td>
+            <td>{{ d.dateEmission }}</td>
+            <td>
+              <span class="badge" [ngClass]="getBadgeClass(d.statut)">
+                {{ d.statut }}
+              </span>
+            </td>
+            <td class="fw-bold">{{ d.totalTTC | currency : "EUR" }}</td>
+            <td class="text-end">
+              <button
+                *ngIf="d.statut === 'BROUILLON'"
+                (click)="validerDevis(d.id!)"
+                class="btn btn-sm btn-outline-success me-2"
+                title="Valider le devis"
+              >
+                <i class="bi bi-check-lg"></i> Valider
+              </button>
+
+              <button
+                *ngIf="d.statut === 'ACCEPTE'"
+                (click)="creerFacture(d.id!)"
+                class="btn btn-sm btn-warning me-2"
+                title="Convertir en Facture"
+              >
+                Facturer
+              </button>
+
+              <button
+                (click)="deleteDevis(d.id!)"
+                class="btn btn-sm btn-outline-danger"
+              >
+                Supprimer
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

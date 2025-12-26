@@ -1,1 +1,76 @@
-<p>produit-form works!</p>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h4 class="mb-0">
+            {{ isEditMode ? "Modifier le Produit" : "Nouveau Produit" }}
+          </h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="produitForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nom du Produit</label>
+                <input type="text" class="form-control" formControlName="nom" />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Catégorie</label>
+                <select class="form-select" formControlName="categorie">
+                  <option value="">Choisir...</option>
+                  <option value="Service">Service</option>
+                  <option value="Matériel">Matériel</option>
+                  <option value="Logiciel">Logiciel</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                class="form-control"
+                formControlName="description"
+                rows="2"
+              ></textarea>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Prix Unitaire (HT)</label>
+                <div class="input-group">
+                  <span class="input-group-text">€</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="prix"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Stock Initial</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="quantiteStock"
+                />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <a routerLink="/produits" class="btn btn-secondary">Annuler</a>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="produitForm.invalid"
+              >
+                {{ isEditMode ? "Enregistrer" : "Créer le Produit" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

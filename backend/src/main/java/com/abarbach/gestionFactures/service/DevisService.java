@@ -95,30 +95,30 @@ public class DevisService {
         Devis devis = devisRepository.findById(devisId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Devis non trouvé"));
 
-        // Vérification logique métier
+        // 1. Vérifier le statut
         if (devis.getStatut() == StatutDevis.BROUILLON) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de facturer un brouillon. Le devis doit être validé ou accepté.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de facturer un brouillon. Le devis doit être validé.");
         }
 
-        // Vérifier si une facture existe déjà pour ce devis (optionnel mais recommandé)
-        // Ici on suppose qu'un devis donne une seule facture
+        // 2. Générer le numéro de facture prévu
+        String numeroFacture = "FACT-" + devis.getNumeroDevis();
 
-        // Calcul du montant final via le DTO
-        DevisDto devisCalculated = mapToDto(devis);
+        // 3. Vérifier si elle existe déjà (C'EST LA CORRECTION CRITIQUE)
+        if (factureRepository.existsByNumeroFacture(numeroFacture)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Une facture existe déjà pour ce devis.");
+        }
 
+        // 4. Création de la facture
         Facture facture = Facture.builder()
-                .numeroFacture("FACT-" + devis.getNumeroDevis()) // Génération auto du numéro
+                .numeroFacture(numeroFacture)
                 .dateFacture(LocalDate.now())
                 .client(devis.getClient())
                 .devisSource(devis)
-                .montantTTC(devisCalculated.totalTTC()) // On stocke le montant calculé
+                // On recalcule ou on récupère le montant via le DTO pour être sûr
+                .montantTTC(mapToDto(devis).totalTTC())
                 .build();
 
         factureRepository.save(facture);
-
-        // Mise à jour optionnelle du statut du devis
-        // devis.setStatut(StatutDevis.FACTURE); // Si vous ajoutez ce statut dans l'Enum
-        // devisRepository.save(devis);
     }
 
     // Mapping Entity -> DTO avec calculs financiers

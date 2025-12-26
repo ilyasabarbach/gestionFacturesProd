@@ -1,1 +1,87 @@
-<p>produit-list works!</p>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catalogue Produits</h2>
+    <a routerLink="/produits/nouveau" class="btn btn-primary">
+      + Nouveau Produit
+    </a>
+  </div>
+
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Rechercher un produit ou une catégorie..."
+      [(ngModel)]="searchTerm"
+      (input)="filterProduits()"
+    />
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Prix HT</th>
+            <th>Stock</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredProduits">
+            <td>
+              <div class="fw-bold">{{ p.nom }}</div>
+              <small class="text-muted">{{ p.description }}</small>
+            </td>
+            <td>
+              <span class="badge bg-secondary">{{ p.categorie }}</span>
+            </td>
+            <td>{{ p.prix | currency : "EUR" }}</td>
+
+            <td>
+              <div class="d-flex align-items-center">
+                <button
+                  class="btn btn-sm btn-outline-secondary py-0 px-2 me-2"
+                  (click)="ajusterStock(p, 1, false)"
+                  [disabled]="p.quantiteStock <= 0"
+                >
+                  -
+                </button>
+
+                <span
+                  [class.text-danger]="p.quantiteStock === 0"
+                  class="fw-bold"
+                >
+                  {{ p.quantiteStock }}
+                </span>
+
+                <button
+                  class="btn btn-sm btn-outline-secondary py-0 px-2 ms-2"
+                  (click)="ajusterStock(p, 1, true)"
+                >
+                  +
+                </button>
+              </div>
+            </td>
+
+            <td class="text-end">
+              <a
+                [routerLink]="['/produits', p.id, 'modifier']"
+                class="btn btn-sm btn-outline-primary me-2"
+              >
+                Modifier
+              </a>
+              <button
+                (click)="deleteProduit(p.id!)"
+                class="btn btn-sm btn-outline-danger"
+              >
+                Supprimer
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
