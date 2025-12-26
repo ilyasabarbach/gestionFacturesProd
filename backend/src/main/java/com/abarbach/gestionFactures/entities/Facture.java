@@ -7,31 +7,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Devis {
+public class Facture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
-    private String numeroDevis;
+    private String numeroFacture;
 
-    private LocalDate dateEmission;
+    private LocalDate dateFacture;
 
-    @Enumerated(EnumType.STRING)
-    private StatutDevis statut;
+    // Lien vers le devis d'origine
+    @OneToOne
+    @JoinColumn(name = "devis_id")
+    private Devis devisSource;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    // Ajout de la relation vers les lignes
-    @OneToMany(mappedBy = "devis", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LigneDevis> lignes;
+    private double montantTTC;
 }

@@ -33,9 +33,14 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String,String> handleExceptions(Exception ex) {
-        Map<String,String> error = new HashMap<>();
-        error.put("error","Une erreur interne est survenue, veuillez réessayer plus tard");
+    public Map<String, String> handleExceptions(Exception ex) {
+        // AFFICHER L'ERREUR DANS LA CONSOLE D'INTELLIJ (Très important)
+        ex.printStackTrace();
+
+        Map<String, String> error = new HashMap<>();
+        // RENVOYER LE VRAI MESSAGE D'ERREUR AU LIEU DU MESSAGE GÉNÉRIQUE
+        error.put("error", ex.getMessage());
+        error.put("cause", ex.getClass().getName()); // Pour savoir quel type d'exception est levé
         return error;
     }
 
