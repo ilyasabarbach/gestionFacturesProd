@@ -8,6 +8,7 @@ import { ProduitFormComponent } from './features/produits/produit-form/produit-f
 // Import Devis
 import { DevisListComponent } from './features/devis/devis-list/devis-list.component';
 import { DevisFormComponent } from './features/devis/devis-form/devis-form.component';
+import { FactureListComponent } from './features/factures/facture-list/facture-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -42,6 +43,11 @@ export const routes: Routes = [
       // Note : On ne modifie pas un devis validé, mais pour l'instant on garde la route
       { path: ':id/modifier', component: DevisFormComponent },
     ],
+  },
+  {
+    path: 'factures',
+    component: FactureListComponent,
+    canActivate: [AuthGuard],
   },
 
   { path: '**', redirectTo: '/login' },

@@ -1,1 +1,52 @@
-<p>facture-list works!</p>
+<div class="container mt-4">
+  <h2 class="mb-4">Historique des Factures</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-striped mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>N° Facture</th>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Devis Source</th>
+            <th>Montant TTC</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let f of factures">
+            <td class="fw-bold">{{ f.numeroFacture }}</td>
+            <td>{{ f.dateFacture }}</td>
+
+            <td>{{ f.nomClient }}</td>
+
+            <td>
+              <span class="badge bg-info text-dark">
+                {{ f.referenceDevis }}
+              </span>
+            </td>
+
+            <td class="fw-bold text-success">
+              {{ f.montantTTC | currency : "EUR" }}
+            </td>
+
+            <td class="text-end">
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                (click)="imprimer(f)"
+              >
+                <i class="bi bi-printer"></i> Imprimer
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="factures.length === 0">
+            <td colspan="6" class="text-center py-4 text-muted">
+              Aucune facture émise.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

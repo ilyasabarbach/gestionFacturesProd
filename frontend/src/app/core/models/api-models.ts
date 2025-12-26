@@ -69,6 +69,10 @@ export interface Facture {
   numeroFacture: string;
   dateFacture: string;
   montantTTC: number;
-  client: Client;
-  // On peut ajouter devisSourceId si besoin
+
+  // CORRECTION : On matche le DTO du Backend
+  nomClient: string;
+  referenceDevis: string;
+
+  // On supprime "client: Client" car le backend envoie maintenant juste le nom
 }
