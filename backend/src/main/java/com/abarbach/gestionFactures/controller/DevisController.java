@@ -48,4 +48,8 @@ public class DevisController {
         devisService.deleteDevis(id);
         return ResponseEntity.noContent().build();
     }
+    @PatchMapping("/{id}/valider")
+    public ResponseEntity<DevisDto> validerDevis(@PathVariable Long id) {
+        return ResponseEntity.ok(devisService.validerDevis(id));
+    }
 }

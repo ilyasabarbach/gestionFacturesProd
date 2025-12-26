@@ -7,6 +7,7 @@ import com.abarbach.gestionFactures.service.ProduitService;
 import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,17 @@ public class ProduitController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         produitService.deleteProduct(id);
+    }
+    // PATCH /api/produits/1/stock/ajouter?quantite=5
+    @PatchMapping("/{id}/stock/ajouter")
+    public ResponseEntity<ProduitDto> ajouterStock(@PathVariable Long id, @RequestParam int quantite) {
+        return ResponseEntity.ok(produitService.ajusterStock(id, quantite, true));
+    }
+
+    // PATCH /api/produits/1/stock/reduire?quantite=2
+    @PatchMapping("/{id}/stock/reduire")
+    public ResponseEntity<ProduitDto> reduireStock(@PathVariable Long id, @RequestParam int quantite) {
+        return ResponseEntity.ok(produitService.ajusterStock(id, quantite, false));
     }
 
     }

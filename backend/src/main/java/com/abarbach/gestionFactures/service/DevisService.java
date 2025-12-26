@@ -156,4 +156,14 @@ public class DevisService {
                 totalTTC
         );
     }
+    @Transactional
+    public DevisDto validerDevis(Long id) {
+        Devis devis = devisRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Devis non trouvé"));
+
+        // On passe le statut à ACCEPTE (ou le statut correspondant dans votre Enum)
+        devis.setStatut(StatutDevis.ACCEPTE);
+
+        return mapToDto(devisRepository.save(devis));
+    }
 }
