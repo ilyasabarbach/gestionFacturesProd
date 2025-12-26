@@ -49,6 +49,7 @@ export const routes: Routes = [
     component: FactureListComponent,
     canActivate: [AuthGuard],
   },
+  { path: 'dashboard', redirectTo: '/clients', pathMatch: 'full' },
 
   { path: '**', redirectTo: '/login' },
 ];
